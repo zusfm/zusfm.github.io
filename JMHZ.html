@@ -1097,17 +1097,18 @@ window.onbeforeprint = () => {
 };
 function printMagic() {
 	const isFF = navigator.userAgent.toLowerCase().includes('firefox');
-    if (isFF || 1) {
+    if (isFF) {
 		window.onbeforeprint();
 
 		window.slowFox = "<!DOCTYPE html>" + saveFilledHtmlData(1);
 		window.open('SlowFoxWorkaround.htm', '_blank');
 		window.onafterprint();
+	} else {
+		window.print();
 	}
 }
 
 window.onafterprint = () => {
-	if (window.opener && window.opener.slowFox) window.close();
     debugger;
     document.querySelectorAll('.no-print-if-empty').forEach(el => el.classList.remove('no-print-if-empty'));
     document.querySelectorAll('.print-placeholder').forEach(el => el.remove());

@@ -1,5 +1,9 @@
 <script>
-    document.write(opener.slowFox);
-    document.close();
-    window.print();
+window.onafterprint = () => {
+	window.close();
+}
+document.write(opener.slowFox);
+document.close();
+window.print();
+window.setTimeout(window.close, 100);
 </script>
