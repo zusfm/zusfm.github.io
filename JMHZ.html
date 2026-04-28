@@ -321,7 +321,7 @@ textarea:focus {
 	<div class="toolbar">
 		<button type="button" onclick="saveFilledHtml()">Uložit vyplněné HTML</button>
 		<button type="button" class="secondary" onclick="validateForm()">Zkontrolovat</button>
-		<button type="button" onclick="window.print()" class="secondary">Tisk / PDF</button>
+		<button type="button" onclick="printMagic()" class="secondary">Tisk / PDF</button>
 	</div>
 
 	<form id="employeeForm" onsubmit="return validateForm()">
@@ -985,7 +985,7 @@ window.prepniLock = (btn) => {
 		}
 	}
 };
-function saveFilledHtml() {
+function saveFilledHtmlData(fireShit) {
 	// 1. Synchronizace hodnot - propíšeme to, co je v polích, do HTML atributů
 	document.querySelectorAll('input, select, textarea').forEach(el => {
 		if (el.tagName === 'SELECT') {
@@ -1023,8 +1023,15 @@ function saveFilledHtml() {
 	const editorUI = docCopy.querySelectorAll('.edit-controls, .editor-toolbar, style[data-editor-style]');
 	editorUI.forEach(el => el.remove());
 
+	if (fireShit) {
+		delete docCopy.onbeforeprint;
+		delete docCopy.onafterprint;
+	}
 	// 4. Stažení
 	const htmlContent = "<!DOCTYPE html>\n" + docCopy.outerHTML;
+	return htmlContent;
+}
+function downloadEm(htmlContent) {
 	const blob = new Blob([htmlContent], { type: 'text/html' });
 	const url = URL.createObjectURL(blob);
 	const a = document.createElement('a');
@@ -1042,7 +1049,12 @@ function saveFilledHtml() {
 		URL.revokeObjectURL(url);
 	}, 0);
 }
+function saveFilledHtml() {
+	downloadEm(saveFilledHtmlData());
+}
+
 window.onbeforeprint = () => {
+	if (window.opener && window.opener.slowFox) return;
     document.querySelectorAll('section').forEach(sec => {
         const inputs = sec.querySelectorAll('input, select, textarea');
         let maData = false;
@@ -1083,8 +1095,19 @@ window.onbeforeprint = () => {
         el.classList.add('no-print-if-empty');
     });
 };
+function printMagic() {
+	const isFF = navigator.userAgent.toLowerCase().includes('firefox');
+    if (isFF || 1) {
+		window.onbeforeprint();
+
+		window.slowFox = "<!DOCTYPE html>" + saveFilledHtmlData(1);
+		window.open('SlowFoxWorkaround.htm', '_blank');
+		window.onafterprint();
+	}
+}
 
 window.onafterprint = () => {
+	if (window.opener && window.opener.slowFox) window.close();
     debugger;
     document.querySelectorAll('.no-print-if-empty').forEach(el => el.classList.remove('no-print-if-empty'));
     document.querySelectorAll('.print-placeholder').forEach(el => el.remove());
