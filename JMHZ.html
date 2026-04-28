@@ -263,23 +263,12 @@ textarea:focus {
 	line-height: 1.35;
 }
 
-@media (max-width:760px) {
-	/* .header {
-		padding: 155px 18px 16px;
-	}
-
-	.logo {
-		width: 165px;
-	}
-
-	.grid {
-		grid-template-columns: 1fr;
-	}
-
-	.signatures {
-		grid-template-columns: 1fr;
-	} */
+.print-placeholder { 
+    display: block !important; 
+    width: 100%;
 }
+/* Skrytí prázdných sekcí (vazba na JS výše) */
+.no-print-if-empty { display: none !important; }
 
 @media print {
     /* Vynucení tisku barev pozadí v Chrome/Safari/Edge */
@@ -287,9 +276,6 @@ textarea:focus {
         -webkit-print-color-adjust: exact !important;
         print-color-adjust: exact !important;
     }
-
-	/* Skrytí prázdných sekcí (vazba na JS výše) */
-//	.no-print-if-empty { display: none !important; }
 	
 	/* Zrušení stínů a barev pozadí stránky */
 	body { background: white !important; }
@@ -303,14 +289,6 @@ textarea:focus {
         background-image: none;
 	}
 
-    .field input, .field select, .field textarea {
-		appearance: none; /* Schová šipky prohlížeče */
-	}
-	input[type="date"]::-webkit-calendar-picker-indicator,
-	select {
-		background: none !important;
-		appearance: none !important;
-	}
 	.toolbar {
 		display: none;
 	}
@@ -360,9 +338,9 @@ textarea:focus {
 						id="drivejsi_prijmeni" name="drivejsi_prijmeni"></div>
 				<div class="field w2"><label for="datum_narozeni">Datum narození</label><input type="date"
 						id="datum_narozeni" name="datum_narozeni"></div>
-				<div class="field w3"><label for="rodne_cislo">Rodné číslo</label><input type="text" id="rodne_cislo"
+				<div class="field w2"><label for="rodne_cislo">Rodné číslo</label><input type="text" id="rodne_cislo"
 						name="rodne_cislo"></div>
-				<div class="field w2"><label for="pohlavi">Pohlaví</label><select id="pohlavi" name="pohlavi">
+				<div class="field w3"><label for="pohlavi">Pohlaví</label><select id="pohlavi" name="pohlavi">
 						<option value=""></option>
 						<option value="žena">žena</option>
 						<option value="muž">muž</option>
@@ -398,10 +376,10 @@ textarea:focus {
 				<div class="field w3"><label for="jiny_ppv_typ">Typ pracovně-právního vztahu</label><select
 						id="jiny_ppv_typ" name="jiny_ppv_typ">
 						<option value=""></option>
-						<option value="pracovní poměr">pracovní poměr</option>
-						<option value="dohoda o provedení práce">dohoda o provedení práce</option>
-						<option value="dohoda o pracovní činnosti">dohoda o pracovní činnosti</option>
-						<option value="jiné pracovní příjmy ze závislé činnosti">jiné pracovní příjmy ze závislé činnosti</option>
+						<option value="HPP">pracovní poměr</option>
+						<option value="DPP">dohoda o provedení práce</option>
+						<option value="DPČ">dohoda o pracovní činnosti</option>
+						<option value="jiné příjmy ze závislé">jiné pracovní příjmy ze závislé činnosti</option>
 					</select></div>
 			</div>
 		</section>
@@ -553,7 +531,7 @@ textarea:focus {
 		<section>
 			<div class="section-title">Zdravotní omezení a důchody</div>
 			<div class="grid">
-				<div class="field w3"><label for="ztpp">Držitel průkazu ZTP/P</label><select id="ztpp" name="ztpp">
+				<div class="field w2"><label for="ztpp">Držitel ZTP/P</label><select id="ztpp" name="ztpp">
 						<option value="Ne">Ne</option>
 						<option value="Ano">Ano</option>
 					</select></div>
@@ -565,9 +543,9 @@ textarea:focus {
 						<option value="III. stupeň invalidity">III. stupeň invalidity</option>
 						<option value="pouze OZZ">pouze OZZ</option>
 					</select></div>
-				<div class="field w4"><label for="zdrav_od">Zdravotní omezení přiznané od</label><input type="date"
+				<div class="field w3"><label for="zdrav_od">Zdravotní omezení přiznané od</label><input type="date"
 						id="zdrav_od" name="zdrav_od"></div>
-				<div class="field w2"><label for="evidence_duchodu">Evidence důchodu</label><select
+				<div class="field w6"><label for="evidence_duchodu">Evidence důchodu</label><select
 						id="evidence_duchodu" name="evidence_duchodu">
 						<option value="bez">bez</option>
 						<option value="Starobní">Starobní</option>
@@ -585,7 +563,7 @@ textarea:focus {
 						<option value="Ne">Ne</option>
 						<option value="Ano">Ano</option>
 					</select></div>
-				<div class="field w4"><label for="predcasny_duchod_od">Předčasný starobní důchod od</label><input
+				<div class="field w3"><label for="predcasny_duchod_od">Předčasný starobní důchod od</label><input
 						type="date" id="predcasny_duchod_od" name="predcasny_duchod_od"></div>
 			</div>
 		</section>
@@ -1066,7 +1044,6 @@ function saveFilledHtml() {
 }
 window.onbeforeprint = () => {
     document.querySelectorAll('section').forEach(sec => {
-debugger;
         const inputs = sec.querySelectorAll('input, select, textarea');
         let maData = false;
         inputs.forEach(i => {
@@ -1079,10 +1056,38 @@ debugger;
             sec.classList.add('no-print-if-empty');
         }
     });
+    // 1. Ošetření DATE inputů
+    document.querySelectorAll('input[type="date"]').forEach(el => {
+        {
+            const [y, m, d] = el.value.split('-');
+            const czechDate = el.value ? `${d}.${m}.${y}` : "-";
+            
+            // Vytvoříme dočasný span s textem
+            const input = document.createElement('input');
+            input.className = 'print-placeholder';
+            input.value = czechDate;
+            
+            el.parentNode.insertBefore(input, el.nextSibling);
+            el.classList.add('no-print-if-empty');
+        }
+    });
+
+    // 2. Ošetření SELECTŮ (aby tam nebyla ta šipka v některých prohlížečích)
+    document.querySelectorAll('select').forEach(el => {
+        const text = el.options[el.selectedIndex].value;
+        const input = document.createElement('input');
+        input.className = 'print-placeholder';
+        input.value = text;
+        
+        el.parentNode.insertBefore(input, el.nextSibling);
+        el.classList.add('no-print-if-empty');
+    });
 };
 
 window.onafterprint = () => {
-    document.querySelectorAll('no-print-if-empty').forEach(el => el.classList.remove('no-print-if-empty'));
+    debugger;
+    document.querySelectorAll('.no-print-if-empty').forEach(el => el.classList.remove('no-print-if-empty'));
+    document.querySelectorAll('.print-placeholder').forEach(el => el.remove());
 }
 function vyplnTestovaciData() {
     document.querySelectorAll('input, textarea').forEach(el => {
@@ -1106,6 +1111,32 @@ function vyplnTestovaciData() {
     // U selectů vybere druhou možnost (pokud existuje)
     document.querySelectorAll('select').forEach(el => {
         if (el.options.length > 1) el.selectedIndex = 1;
+    });
+
+    // Odstraníme dočasné spany a zviditelníme inputy
+    document.querySelectorAll('.print-placeholder').forEach(el => el.remove());
+    document.querySelectorAll('.no-print-if-empty').forEach(el => el.classList.remove('no-print-if-empty'));
+}
+function otestujMaximalniDelkuSelectu() {
+    document.querySelectorAll('select').forEach(sel => {
+        let nejvetsiDelka = 0;
+        let indexNejdelsiho = 0;
+
+        Array.from(sel.options).forEach((opt, index) => {
+            if (opt.text.length > nejvetsiDelka) {
+                nejvetsiDelka = opt.text.length;
+                indexNejdelsiho = index;
+            }
+        });
+
+        // Nastavíme nejdělší variantu, abychom viděli, co to udělá
+        sel.selectedIndex = indexNejdelsiho;
+        
+        // Pokud je text delší než cca 25 znaků a pole je malé (w1-w2), 
+        // můžeš si to nechat vypsat do konzole pro kontrolu
+        if (nejvetsiDelka > 20) {
+            console.warn(`Select ID: ${sel.id} má dlouhý text (${nejvetsiDelka} znaků).`);
+        }
     });
 }
 </script></html>
