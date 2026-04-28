@@ -1057,7 +1057,7 @@ window.onbeforeprint = () => {
 	if (window.opener && window.opener.slowFox) return;
     document.querySelectorAll('section').forEach(sec => {
         const inputs = sec.querySelectorAll('input, select, textarea');
-        let maData = false;
+        let maData = !inputs.length;
         inputs.forEach(i => {
             if (i.value.trim() !== "" && i.value !== "Ne") maData = true;
         });
