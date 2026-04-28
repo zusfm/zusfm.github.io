@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Administrativa ZUŠ FM</title>
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --link-color: #3498db;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            background-color: #f8f9fa;
+            color: #333;
+        }
+
+        header {
+            border-bottom: 2px solid var(--primary-color);
+            margin-bottom: 30px;
+            padding-bottom: 10px;
+        }
+
+        h1 {
+            margin-top: 0;
+        }
+
+        .link-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .link-item {
+            background: white;
+            margin-bottom: 10px;
+            padding: 20px;
+            border-radius: 6px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            transition: transform 0.2s;
+            display: flex;
+            align-items: center;
+        }
+
+        .link-item:hover {
+            transform: translateX(5px);
+            border-left: 5px solid var(--link-color);
+        }
+
+        .link-item a {
+            text-decoration: none;
+            color: var(--link-color);
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+
+        .description {
+            display: block;
+            font-size: 0.9em;
+            color: #666;
+            font-weight: normal;
+        }
+
+        footer {
+            margin-top: 50px;
+            font-size: 0.8em;
+            color: #999;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Základní umělecká škola Frýdek-Místek</h1>
+        <p>Interní informační rozcestník pro zaměstnance</p>
+    </header>
+
+    <main>
+        <ul class="link-list">
+            <li class="link-item">
+                <div>
+                    <a href="JMHZ.html" target="_blank">JMHZ – Jednotné mzdové hlášení</a>
+                    <span class="description">Formulář.</span>
+                </div>
+            </li>
+            
+            </ul>
+    </main>
+
+    <footer>
+        &copy; 2026 ZUŠ Frýdek-Místek | zusfm.github.io
+    </footer>
+
+</body>
+</html>
