@@ -241,7 +241,7 @@ textarea:focus {
 	display: grid;
 	grid-template-columns: 1fr 1fr;
 	gap: 42px;
-	padding: 80px 14px 24px;
+	padding: 140px 14px 24px;
 }
 
 .sig-line {
@@ -320,8 +320,9 @@ textarea:focus {
 
 	<div class="toolbar">
 		<button type="button" onclick="saveFilledHtml()">Uložit vyplněné HTML</button>
-		<button type="button" class="secondary" onclick="validateForm()">Zkontrolovat</button>
 		<button type="button" onclick="printMagic()" class="secondary">Tisk / PDF</button>
+		<button type="button" class="secondary" onclick="copyJSONdata()">Zkopíruj data</button>
+		<button type="button" class="secondary" onclick="readData()">Načti data</button>
 	</div>
 
 	<form id="employeeForm" onsubmit="return validateForm()">
@@ -510,23 +511,23 @@ textarea:focus {
 						id="datum_ukon_en_" name="datum_ukon_en_"></div>
 			</div>
 			<div class="subsection">Číselník nejvyššího dosaženého vzdělání</div>
-		<div class="grid">
-			<div class="field static-field w2"><div class="static-item"><b>A</b>&nbsp;Bez vzdělání</div><div class="edit-controls">
-</div></div><div class="field static-field w3"><div class="static-item"><b>B</b>&nbsp;Neúplné základní vzdělání</div><div class="edit-controls">
-</div></div><div class="field static-field w2"><div class="static-item"><b>C</b>&nbsp;Základní vzdělání</div><div class="edit-controls">
-</div></div><div class="field static-field w3"><div class="static-item"><b>D</b>&nbsp;Nižší střední vzdělání</div><div class="edit-controls">
-</div></div><div class="field static-field w3"><div class="static-item"><b>E</b>&nbsp;Nižší střední odborné vzdělání</div><div class="edit-controls">
-</div></div><div class="field static-field w4"><div class="static-item"><b>H</b>&nbsp;Střední odborné vzdělání s výučním listem</div><div class="edit-controls">
-</div></div><div class="field static-field w6"><div class="static-item"><b>J</b>&nbsp;Střední nebo střední odborné vzdělání bez maturity i výučního listu</div><div class="edit-controls">
-</div></div><div class="field static-field w3"><div class="static-item"><b>K</b>&nbsp;Úplné střední všeobecné vzdělání</div><div class="edit-controls">
-</div></div><div class="field static-field w5"><div class="static-item"><b>L</b>&nbsp;Úplné střední odborné vzdělání s vyučením i maturitou</div><div class="edit-controls">
-</div></div><div class="field static-field w5"><div class="static-item"><b>M</b>&nbsp;Úplné střední odborné vzdělání s maturitou bez vyučení</div><div class="edit-controls">
-</div></div><div class="field static-field w3"><div class="static-item"><b>N</b>&nbsp;Vyšší odborné vzdělání</div><div class="edit-controls">
-</div></div><div class="field static-field w4"><div class="static-item"><b>P</b>&nbsp;Vyšší odborné vzdělání v konzervatoři</div><div class="edit-controls">
-</div></div><div class="field static-field w4"><div class="static-item"><b>R</b>&nbsp;Vysokoškolské bakalářské vzdělání</div><div class="edit-controls">
-</div></div><div class="field static-field w4"><div class="static-item"><b>T</b>&nbsp;Vysokoškolské magisterské vzdělání</div><div class="edit-controls">
-</div></div><div class="field static-field w3"><div class="static-item"><b>V</b>&nbsp;Vysokoškolské doktorské vzdělání</div><div class="edit-controls">
-</div></div></div>
+			<div class="grid">
+				<div class="field static-field w2"><div class="static-item"><b>A</b>&nbsp;Bez vzdělání</div>input</div>
+				<div class="field static-field w3"><div class="static-item"><b>B</b>&nbsp;Neúplné základní vzdělání</div>input</div>
+				<div class="field static-field w2"><div class="static-item"><b>C</b>&nbsp;Základní vzdělání</div>input</div>
+				<div class="field static-field w3"><div class="static-item"><b>D</b>&nbsp;Nižší střední vzdělání</div>input</div>
+				<div class="field static-field w3"><div class="static-item"><b>E</b>&nbsp;Nižší střední odborné vzdělání</div>input</div>
+				<div class="field static-field w4"><div class="static-item"><b>H</b>&nbsp;Střední odborné vzdělání s výučním listem</div>input</div>
+				<div class="field static-field w6"><div class="static-item"><b>J</b>&nbsp;Střední nebo střední odborné vzdělání bez maturity i výučního listu</div>input</div>
+				<div class="field static-field w3"><div class="static-item"><b>K</b>&nbsp;Úplné střední všeobecné vzdělání</div>input</div>
+				<div class="field static-field w5"><div class="static-item"><b>L</b>&nbsp;Úplné střední odborné vzdělání s vyučením i maturitou</div>input</div>
+				<div class="field static-field w5"><div class="static-item"><b>M</b>&nbsp;Úplné střední odborné vzdělání s maturitou bez vyučení</div>input</div>
+				<div class="field static-field w3"><div class="static-item"><b>N</b>&nbsp;Vyšší odborné vzdělání</div>input</div>
+				<div class="field static-field w4"><div class="static-item"><b>P</b>&nbsp;Vyšší odborné vzdělání v konzervatoři</div>input</div>
+				<div class="field static-field w4"><div class="static-item"><b>R</b>&nbsp;Vysokoškolské bakalářské vzdělání</div>input</div>
+				<div class="field static-field w4"><div class="static-item"><b>T</b>&nbsp;Vysokoškolské magisterské vzdělání</div>input</div>
+				<div class="field static-field w3"><div class="static-item"><b>V</b>&nbsp;Vysokoškolské doktorské vzdělání</div>input</div>
+			</div>
 		</section>
 		<section>
 			<div class="section-title">Zdravotní omezení a důchody</div>
@@ -776,21 +777,22 @@ function exportDoOpenOffice() {
 			};
 
 			// LOGIKA: Pokud pole NEMÁ input, je to GROUPNOTE (nadpis skupiny v mřížce)
+			const sirkaMatch = el.className.match(/w([\d]+)/);
 			if (!input) {
 				field.TYP = "groupnote";
-				field.SIRKA = "4"; // Groupnote bývá přes celý řádek
+				field.SIRKA = parseInt(sirkaMatch[1]);
+				field.LABEL = el.innerHTML;
 			} else {
 				if (input.tagName === 'SELECT') {
 					field.TYP = "select";
-					field.MOZNOSTI = Array.from(input.options).map(o => o.text).join('|');
+					field.MOZNOSTI = Array.from(input.options).map(o => `${o.value}|${o.text}`).join(';');
 				} else {
 					field.TYP = input.type || "text";
 				}
 				
 				// Zjištění šířky z třídy w1-w4
-				const sirkaMatch = el.className.match(/w([1-4])/);
 				if (sirkaMatch)
-					field.SIRKA = 3 * parseInt(sirkaMatch[1]);
+					field.SIRKA = parseInt(sirkaMatch[1]);
 			}
 
 			fields.push(field);
@@ -892,7 +894,11 @@ function generujObsahZExcelu(tsvData) {
 			const ph = f.PLACEHOLDER ? `placeholder="${f.PLACEHOLDER}"` : '';
 
 			if (f.TYP === 'select') {
-				const opts = (f.MOZNOSTI || "").split('|').map(o => `<option value="${o}">${o}</option>`).join('');
+				const opts = (f.MOZNOSTI || "").split(';').map(dvojice => {
+					const [val, txt] = dvojice.trim().split('|');
+					// Pokud tam není |, použijeme text i jako hodnotu (fallback)
+					return `<option value="${val}">${txt || val}</option>`;
+				}).join('');
 				input = `<select id="${f.ID}" name="${f.ID}" ${f.EMPLOYER==='ANO'?'disabled':''}>${opts}</select>`;
 			} else if (f.TYP === 'textarea') {
 				input = `<textarea id="${f.ID}" name="${f.ID}" ${ph} ${ro}></textarea>`;
@@ -985,17 +991,51 @@ window.prepniLock = (btn) => {
 		}
 	}
 };
-function saveFilledHtmlData(fireShit) {
+function copyJSONdata() {
+	navigator.clipboard.writeText(JSON.stringify(copyData(),0,1));
+}
+async function readData() {
+	let json = await navigator.clipboard.readText();
+	try {
+		json = JSON.parse(json);
+		for(let n in json) {
+			let el = document.getElementsByName(n);
+			if (el.length != 1) debugger;
+			else el = el[0];
+			if (el.constructor === HTMLInputElement) {
+				el.value = json[n];
+			} else if (el.constructor === HTMLSelectElement) {
+				for(let o of el.options) {
+					if (o.value == json[n]) {
+						o.selected = true;
+//						el.selectedIndex = -1;
+					}
+				}
+			} else {
+				debugger;
+			}
+		}
+	} catch (e) {
+		alert(e);
+	}
+}
+function copyData() {
+	const collectedData = {};
 	// 1. Synchronizace hodnot - propíšeme to, co je v polích, do HTML atributů
 	document.querySelectorAll('input, select, textarea').forEach(el => {
 		if (el.tagName === 'SELECT') {
 			// U selectu musíme označit vybranou option jako "selected"
 			Array.from(el.options).forEach(opt => {
-				if (opt.selected) opt.setAttribute('selected', 'selected');
-				else opt.removeAttribute('selected');
+				if (opt.selected) {
+					opt.setAttribute('selected', 'selected');
+					collectedData[el.name] = opt.value;
+				} else opt.removeAttribute('selected');
 			});
 		} else if (el.type === 'checkbox' || el.type === 'radio') {
-			if (el.checked) el.setAttribute('checked', 'checked');
+			if (el.checked) {
+				el.setAttribute('checked', 'checked');
+				collectedData[el.name] = true;
+			}
 			else el.removeAttribute('checked');
 		} else {
 			// U textových polí a textarei zapíšeme hodnotu do atributu value
@@ -1003,8 +1043,13 @@ function saveFilledHtmlData(fireShit) {
 			if (el.tagName === 'TEXTAREA') {
 				el.innerText = el.value; // Textarea ukládá obsah uvnitř tagu
 			}
+			collectedData[el.name] = el.value;
 		}
 	});
+	return collectedData;
+}
+function saveFilledHtmlData(fireShit) {
+	copyData();
 
 	// 2. Teď vytvoříme kopii (už se zapsanými hodnotami)
 	const docCopy = document.documentElement.cloneNode(true);
