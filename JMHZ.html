@@ -306,6 +306,24 @@ textarea:focus {
 	.toolbar {
 		display: none;
 	}
+    body:not(.authorited-print){
+        visibility:hidden;
+        height:0;
+        overflow:visible;
+    }
+    body:not(.authorited-print)::after {
+        content: "Tudy ne, knoflík 'Tisk / PDF' kvůli (Slow)Foxu 🥴 Vaše Mozilla Foundation 🤡";
+        visibility: visible;
+        display: block;
+        position: absolute;
+        top: 100px;
+        left: 0;
+        right: 0;
+        font-size: 20pt;
+        color: red;
+        text-align: center;
+        margin-top: 50px;
+    }
 }
 </style>
 </head>
@@ -1070,6 +1088,7 @@ function saveFilledHtmlData(fireShit) {
 
 	// 2. Teď vytvoříme kopii (už se zapsanými hodnotami)
 	const docCopy = document.documentElement.cloneNode(true);
+	docCopy.lastElementChild.classList.add("authorited-print");
 
 	docCopy.querySelectorAll('.field').forEach(f => {
 		f.classList.remove('employer-locked', 'employer-only');
@@ -1115,7 +1134,7 @@ function saveFilledHtml() {
 }
 
 window.onbeforeprint = () => {
-	if (window.opener && window.opener.slowFox) return;
+	if (document.querySelector(".print-placeholder"))  return;
     document.querySelectorAll('section').forEach(sec => {
         const inputs = sec.querySelectorAll('input, select, textarea');
         let maData = !inputs.length;
@@ -1252,7 +1271,10 @@ function showInternals() {
 }
 /* Godzila
 // Jakmile se vše načte, spustíme tisk
-window.onload = () => { window.print(); };
+window.onload = () => { 
+	window.onbeforeprint();
+	window.print();
+};
 
 // Po tisku (nebo zrušení) iframe odstraníme z DOMu rodiče
 window.onafterprint = () => { window.parent.postMessage('uklid-iframe', '*'); };
