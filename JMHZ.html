@@ -1145,8 +1145,7 @@ window.onbeforeprint = () => {
             if (val === "") return;
 
             if (i instanceof HTMLSelectElement) {
-				if (val === "Ne"
-				|| (i.selectedIndex === 0 && val === "bez"))
+				if (val === "Ne")
 					return;
             }
 			
@@ -1155,7 +1154,8 @@ window.onbeforeprint = () => {
 
         // Schováme jen pokud není v nadpisu "Osobní" (ty chceme vždy)
         const title = sec.querySelector('.section-title')?.innerText || "";
-        if (!maData && title != 'Rodina a slevy na dani') {
+        if (!maData && title != 'Rodina a slevy na dani'
+		&& !title.includes("Exekuce")) {
             sec.classList.add('no-print-if-empty');
         }
     });
