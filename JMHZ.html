@@ -463,7 +463,6 @@ textarea:focus {
 			<div class="section-title">Rodina a slevy na dani</div>
 			<div class="grid">
 				<div class="field w3"><label for="sleva_poplatnik">Uplatňuji slevu na poplatníka</label>
-<input type="checkbox" style="position:absolute;display:none">
 					<select
 						id="sleva_poplatnik" name="sleva_poplatnik">
 						<option value="Ano">Ano</option>
@@ -1141,12 +1140,22 @@ window.onbeforeprint = () => {
         const inputs = sec.querySelectorAll('input, select, textarea');
         let maData = !inputs.length;
         inputs.forEach(i => {
-            if (i.value.trim() !== "" && i.value !== "Ne") maData = true;
+			var val = i.value.trim();
+    
+            if (val === "") return;
+
+            if (i instanceof HTMLSelectElement) {
+				if (val === "Ne"
+				|| (i.selectedIndex === 0 && val === "bez"))
+					return;
+            }
+			
+			maData = true;
         });
 
         // Schováme jen pokud není v nadpisu "Osobní" (ty chceme vždy)
         const title = sec.querySelector('.section-title')?.innerText || "";
-        if (!maData && !title.includes('Osobní')) {
+        if (!maData && title != 'Rodina a slevy na dani') {
             sec.classList.add('no-print-if-empty');
         }
     });
